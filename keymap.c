@@ -23,18 +23,18 @@ enum planck_layers {
 #define KC_MDSH S(LALT(KC_MINS))
 
 // Window manager keys
-#define WM_FULL LALT(LGUI(KC_F))
-#define WM_NEXT LCTL(LALT(LGUI(KC_RGHT)))
-#define WM_PREV LCTL(LALT(LGUI(KC_LEFT)))
-#define WM_NW   LCTL(LGUI(KC_LEFT))
-#define WM_N    LALT(LGUI(KC_UP))
-#define WM_NE   LCTL(LGUI(KC_RGHT))
-#define WM_E    LALT(LGUI(KC_RGHT))
-#define WM_SE   S(LCTL(LGUI(KC_RGHT)))
-#define WM_S    LALT(LGUI(KC_DOWN))
-#define WM_SW   S(LCTL(LGUI(KC_LEFT)))
-#define WM_W    LALT(LGUI(KC_LEFT))
-#define WM_CNTR LALT(LGUI(KC_C))
+#define WM_FULL LGUI(KC_F)
+#define WM_NEXT LALT(KC_RGHT)
+#define WM_PREV LALT(KC_LEFT)
+// #define WM_NW   LCTL(LGUI(KC_LEFT))
+// #define WM_N    LALT(LGUI(KC_UP))
+// #define WM_NE   LCTL(LGUI(KC_RGHT))
+// #define WM_E    LALT(LGUI(KC_RGHT))
+// #define WM_SE   S(LCTL(LGUI(KC_RGHT)))
+// #define WM_S    LALT(LGUI(KC_DOWN))
+// #define WM_SW   S(LCTL(LGUI(KC_LEFT)))
+// #define WM_W    LALT(LGUI(KC_LEFT))
+// #define WM_CNTR LALT(LGUI(KC_C))
 
 // Custom key codes
 enum planck_keycodes {
@@ -65,14 +65,22 @@ enum planck_keycodes {
 
 // Tap dance declarations
 enum {
-  TD_W_T = 0
+  TD_TOG_M = 0,
+  TD_TOG_C,
+  TD_TOG_FILES,
 };
 
 // Tap dance definitions
 qk_tap_dance_action_t tap_dance_actions[] = {
 
-  // once: W, twice: T
-  [TD_W_T]  = ACTION_TAP_DANCE_DOUBLE(KC_W, KC_T),
+  // once: M, twice: CTRL+ALT+M to toggle Menubar in Sublime
+  [TD_TOG_M]  = ACTION_TAP_DANCE_DOUBLE(KC_M, LCTL(LALT(KC_M))),
+
+  // once: /, twice: CTRL+/ to comment out sections in Sublime
+  [TD_TOG_C]  = ACTION_TAP_DANCE_DOUBLE(KC_SLSH, LCTL(KC_SLSH)),
+
+  // once: F, twice: CTRL+ALT+F to toggle files out sections in Sublime
+  [TD_TOG_FILES]  = ACTION_TAP_DANCE_DOUBLE(KC_F, LCTL(LALT(KC_F))),
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -90,9 +98,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    *   Tap for ] ----------'                                 Tap for [ ----------'
    */
   [QWERTY_LAYER] = LAYOUT_planck_grid(
-    KC_ESC,        KC_Q,           TD(TD_W_T),    KC_E,    KC_R,  KC_T,   KC_Y,    KC_U,  KC_I,    KC_O,    KC_P,           KC_QUOT,
-    CTL_T(KC_TAB), KC_A,           KC_S,    KC_D,    KC_F,  KC_G,   KC_H,    KC_J,  KC_K,    KC_L,    NAV_SCLN,       CTL_T(KC_ENT),
-    KC_LSPO,       KC_Z,           KC_X,    KC_C,    KC_V,  KC_B,   KC_N,    KC_M,  KC_COMM, KC_DOT,  KC_SLSH,        KC_RSPC,
+    KC_ESC,        KC_Q,           KC_W,    KC_E,    KC_R,  KC_T,   KC_Y,    KC_U,  KC_I,    KC_O,    KC_P,           KC_QUOT,
+    CTL_T(KC_TAB), KC_A,           KC_S,    KC_D,    TD(TD_TOG_FILES),  KC_G,   KC_H,    KC_J,  KC_K,    KC_L,    NAV_SCLN,       CTL_T(KC_ENT),
+    KC_LSPO,       KC_Z,           KC_X,    KC_C,    KC_V,  KC_B,   KC_N,    TD(TD_TOG_M),  KC_COMM, KC_DOT,  TD(TD_TOG_C),        KC_RSPC,
     GUI_L,         ALL_T(KC_RBRC), KC_LALT, KC_LGUI, LOWER, KC_SPC, KC_SPC, RAISE, KC_RGUI, KC_RALT, ALL_T(KC_LBRC), GUI_R
   ),
 
@@ -168,7 +176,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    */
   [GUI_LAYER] = LAYOUT_planck_grid(
     _______, KC_BTN2, KC_MS_U, KC_BTN1, KC_WH_D, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
-    _______, KC_MS_L, KC_MS_D, KC_MS_R, KC_WH_U, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+    _______, KC_MS_L, KC_MS_D, KC_MS_R, KC_WH_U, XXXXXXX, XXXXXXX, WM_FULL, WM_NEXT, WM_PREV, XXXXXXX, _______,
     _______, KC_UNDO, KC_CUT,  KC_COPY, KC_PSTE, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
     _______, KC_MPRV, KC_MPLY, KC_MNXT, KC_SLCK, KC_SLEP, KC_SLEP, KC_PAUS, KC_MUTE, KC_VOLD, KC_VOLU, _______
   ),
