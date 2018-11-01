@@ -63,6 +63,18 @@ enum planck_keycodes {
 #define LIT_INC BL_INC
 #endif
 
+// Tap dance declarations
+enum {
+  TD_W_T = 0
+};
+
+// Tap dance definitions
+qk_tap_dance_action_t tap_dance_actions[] = {
+
+  // once: W, twice: T
+  [TD_W_T]  = ACTION_TAP_DANCE_DOUBLE(KC_W, KC_T),
+};
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   /* Base layer (Qwerty)
    *                ┌─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┐
